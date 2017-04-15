@@ -7,6 +7,9 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
+
+import static android.hardware.SensorManager.GRAVITY_EARTH;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -18,7 +21,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     int degree=0;
-    float[] accSDK, accNDK;
+    float[] accSDK, accNDK,gravity;
+    float angle = 0;
+    AccSensorErrorData errorData;
+    Gravity g;
+    Orientation orientation;
+    TextView angle_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -30,6 +38,10 @@ public class MainActivity extends AppCompatActivity
         startService(new Intent(this, SensorService.class));
         accSDK = new float[]{0,0,0};
         accNDK = new float[]{0,0,0};
+        gravity = new float[3];
+        g = new Gravity();
+        orientation = new Orientation();
+        angle_tv = (TextView) findViewById(R.id.angle_tv_value);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver()
         {
@@ -55,6 +67,17 @@ public class MainActivity extends AppCompatActivity
         accNDK[1]=y;
         accNDK[2]=z;
         calculateAngle(accNDK);
+        float accNorm = (float) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
+
+        gravity[0] = x * (GRAVITY_EARTH / accNorm);
+        gravity[1] = y * (GRAVITY_EARTH / accNorm);
+        gravity[2] = z * (GRAVITY_EARTH / accNorm);
+        angle = (float) Math.toDegrees( g.angleBetweenGravity(gravity)) ;
+        if(angle<0)
+        {
+            angle=360+angle;
+        }
+        angle_tv.setText(Float.toString(angle));
 
         String accStr =   x + " " + y + " " + z+ " " + accSDK[0] + " " + accSDK[1] + " " + accSDK[2]+"\n";
 
