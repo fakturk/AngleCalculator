@@ -16,7 +16,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.245"/>
+        app:layout_constraintHorizontal_bias="0.245"
+        />
     <TextView
         android:id="@+id/angle_tv_value"
         android:layout_width="wrap_content"
@@ -26,6 +27,48 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.42"/>
+        />
+    <TextView
+        android:id="@+id/angleCorrected_tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Angle (Corrected):"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.159"
+        app:layout_constraintVertical_bias="0.554"/>
+    <TextView
+        android:id="@+id/angleCorrected_tv_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.554"/>
+    <TextView
+        android:id="@+id/difference_tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Angle Difference:"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.159"
+        app:layout_constraintVertical_bias="0.611"/>
+    <TextView
+        android:id="@+id/difference_tv_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.611"/>
 
 </android.support.constraint.ConstraintLayout>

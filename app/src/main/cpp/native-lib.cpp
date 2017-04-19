@@ -96,7 +96,7 @@ static int get_sensor_events(int fd, int events, void* data)
             {
 //                sendData(event.timestamp, event.acceleration.x, event.acceleration.y, event.acceleration.z);
                 env->CallVoidMethod(g_object, writeData,event.timestamp, event.acceleration.x, event.acceleration.y, event.acceleration.z);
-                LOGI(" %lld %f %f %f ", event.timestamp, event.acceleration.x, event.acceleration.y, event.acceleration.z);
+//                LOGI(" %lld %f %f %f ", event.timestamp, event.acceleration.x, event.acceleration.y, event.acceleration.z);
             }
 
         }

@@ -22,11 +22,12 @@ public class MainActivity extends AppCompatActivity
 
     int degree=0;
     float[] accSDK, accNDK,gravity;
-    float angle = 0;
+    float angle = 0, angleCorrected=0;
     AccSensorErrorData errorData;
     Gravity g;
     Orientation orientation;
-    TextView angle_tv;
+    TextView angle_tv, angleCorrected_tv, difference_tv;
+    Newton newton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -41,7 +42,10 @@ public class MainActivity extends AppCompatActivity
         gravity = new float[3];
         g = new Gravity();
         orientation = new Orientation();
+        newton = new Newton();
         angle_tv = (TextView) findViewById(R.id.angle_tv_value);
+        angleCorrected_tv = (TextView) findViewById(R.id.angleCorrected_tv_value);
+        difference_tv = (TextView) findViewById(R.id.difference_tv_value);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver()
         {
@@ -78,6 +82,9 @@ public class MainActivity extends AppCompatActivity
             angle=360+angle;
         }
         angle_tv.setText(Float.toString(angle));
+        angleCorrected = newton.iterate(angle,accNDK);
+        angleCorrected_tv.setText(Float.toString(angleCorrected));
+        difference_tv.setText(Float.toString(angle-angleCorrected));
 
         String accStr =   x + " " + y + " " + z+ " " + accSDK[0] + " " + accSDK[1] + " " + accSDK[2]+"\n";
 

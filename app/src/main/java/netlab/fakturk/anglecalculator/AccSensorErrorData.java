@@ -132,6 +132,14 @@ public class AccSensorErrorData
     float[] getError(String phoneType, float angle)
     {
         float[] error = {0f,0f,0f};
+        while (angle<0)
+        {
+            angle+=360;
+        }
+        while(angle>360)
+        {
+            angle-=360;
+        }
         int indice= (int) (angle/10);
 
 
@@ -149,5 +157,35 @@ public class AccSensorErrorData
         }
 //        System.out.println("angle: "+angle+", indice: "+indice+", difference: "+difference+", error: "+error[0]+" "+error[1]+" "+error[2]);
         return error;
+    }
+    float[] getSlope(String phoneType, float angle)
+    {
+        float[] slope = {0f,0f,0f};
+        System.out.println(angle);
+        while (angle<0)
+        {
+            angle+=360;
+        }
+        while(angle>360)
+        {
+            angle-=360;
+        }
+
+        int indice= (int) (angle/10);
+        System.out.println(angle+", "+indice);
+        float difference = (angle - indice*10);
+        for (int i = 0; i < 3; i++) {
+            if (indice==35)
+            {
+                slope[i] = (float) ((htc[0][i + 1] - htc[35][i + 1]) /10.0);
+            }
+            else
+            {
+                slope[i] = (float) ((htc[indice + 1][i + 1] - htc[indice][i + 1]) /10.0);
+
+            }
+        }
+
+        return slope;
     }
 }
