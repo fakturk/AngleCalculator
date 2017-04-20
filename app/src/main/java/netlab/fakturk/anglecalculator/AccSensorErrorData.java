@@ -161,7 +161,7 @@ public class AccSensorErrorData
     float[] getSlope(String phoneType, float angle)
     {
         float[] slope = {0f,0f,0f};
-        System.out.println(angle);
+//        System.out.println(angle);
         while (angle<0)
         {
             angle+=360;
@@ -172,7 +172,7 @@ public class AccSensorErrorData
         }
 
         int indice= (int) (angle/10);
-        System.out.println(angle+", "+indice);
+//        System.out.println(angle+", "+indice);
         float difference = (angle - indice*10);
         for (int i = 0; i < 3; i++) {
             if (indice==35)

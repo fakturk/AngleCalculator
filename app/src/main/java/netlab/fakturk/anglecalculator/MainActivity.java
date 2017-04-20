@@ -23,17 +23,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     int degree=0;
-    float[] accSDK, accNDK,gravity, calibration, accCor, without;
-    float[] velSDK, velNDK, velCor, velWithout;
-    float[] disSDK, disNDK, disCor, disWithout;
+    float[] accSDK, accNDK,gravity, calibration, accCor, without, accNewton;
+    float[] velSDK, velNDK, velCor, velWithout, velNewton;
+    float[] disSDK, disNDK, disCor, disWithout, disNewton;
 
     float angle = 0, angleCorrected=0, currentAngle=0;
     AccSensorErrorData errorData;
     Gravity g;
     Orientation orientation;
-    TextView angle_tv, angleCorrected_tv, difference_tv, calibrate_tv, accNDK_tv,accSDK_tv, accCor_tv,sinCos_tv,without_tv;
-    TextView velNDK_tv,velSDK_tv, velCor_tv,velWithout_tv;
-    TextView disNDK_tv,disSDK_tv, disCor_tv,disWithout_tv;
+    TextView angle_tv, angleCorrected_tv, difference_tv, calibrate_tv, accNDK_tv,accSDK_tv, accCor_tv,sinCos_tv,without_tv, accNewton_tv;
+    TextView velNDK_tv,velSDK_tv, velCor_tv,velWithout_tv, velNewton_tv;
+    TextView disNDK_tv,disSDK_tv, disCor_tv,disWithout_tv, disNewton_tv;
 
     Newton newton;
     Button buttonCalibrate;
@@ -51,16 +51,19 @@ public class MainActivity extends AppCompatActivity
         accNDK = new float[]{0,0,0};
         accCor = new float[]{0,0,0};
         without = new float[]{0,0,0};
+        accNewton = new float[]{0,0,0};
 
         velSDK = new float[]{0,0,0};
         velNDK = new float[]{0,0,0};
         velCor = new float[]{0,0,0};
         velWithout = new float[]{0,0,0};
+        velNewton = new float[]{0,0,0};
 
         disSDK = new float[]{0,0,0};
         disNDK = new float[]{0,0,0};
         disCor = new float[]{0,0,0};
         disWithout = new float[]{0,0,0};
+        disNewton = new float[]{0,0,0};
         
         calibration = new float[]{0,0,0};
         gravity = new float[3];
@@ -77,17 +80,20 @@ public class MainActivity extends AppCompatActivity
         accCor_tv = (TextView) findViewById(R.id.accCorr_tv_value);
         sinCos_tv = (TextView) findViewById(R.id.sinCos_tv);
         without_tv = (TextView) findViewById(R.id.without_tv_value);
-        
+        accNewton_tv = (TextView) findViewById(R.id.accNewton_tv_value);
+
         velNDK_tv = (TextView) findViewById(R.id.velNDK_tv_value);
         velSDK_tv = (TextView) findViewById(R.id.velSDK_tv_value);
         velCor_tv = (TextView) findViewById(R.id.velCorr_tv_value);
         velWithout_tv = (TextView) findViewById(R.id.velWithout_tv_value);
+        velNewton_tv = (TextView) findViewById(R.id.velNewton_tv_value);
 
         disNDK_tv = (TextView) findViewById(R.id.disNDK_tv_value);
         disSDK_tv = (TextView) findViewById(R.id.disSDK_tv_value);
         disCor_tv = (TextView) findViewById(R.id.disCorr_tv_value);
         disWithout_tv = (TextView) findViewById(R.id.disWithout_tv_value);
-        
+        disNewton_tv = (TextView) findViewById(R.id.disNewton_tv_value);
+
         buttonCalibrate = (Button) findViewById(R.id.buttonCalibrate);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver()
@@ -116,6 +122,26 @@ public class MainActivity extends AppCompatActivity
                     calibration[2]=calibration[2]-GRAVITY_EARTH;
                     calibrate_tv.setText(calibration[0]+", "+calibration[1]+", "+calibration[2]) ;
                     newton.setCalibration(calibration);
+
+                    accSDK = new float[]{0,0,0};
+                    accNDK = new float[]{0,0,0};
+                    accCor = new float[]{0,0,0};
+                    without = new float[]{0,0,0};
+                    accNewton = new float[]{0,0,0};
+
+                    velSDK = new float[]{0,0,0};
+                    velNDK = new float[]{0,0,0};
+                    velCor = new float[]{0,0,0};
+                    velWithout = new float[]{0,0,0};
+                    velNewton = new float[]{0,0,0};
+
+                    disSDK = new float[]{0,0,0};
+                    disNDK = new float[]{0,0,0};
+                    disCor = new float[]{0,0,0};
+                    disWithout = new float[]{0,0,0};
+                    disNewton = new float[]{0,0,0};
+
+
                 }
             }
         });
@@ -151,41 +177,67 @@ public class MainActivity extends AppCompatActivity
             angleCorrected = newton.iterate(angle, accNDK);
         }
         angleCorrected_tv.setText(Float.toString(angleCorrected));
-        difference_tv.setText(Float.toString(angle-angleCorrected));
+        float angleDif = angle-angleCorrected;
+        if (angleDif>180)
+            angleDif=360-angleDif;
+        difference_tv.setText(Float.toString(angleDif));
+        accNewton = newton.getAcc(accNDK,angleCorrected);
 
         accNDK_tv.setText(String.format("%.02f", x)+", "+String.format("%.02f", y)+", "+String.format("%.02f", z));
         accSDK_tv.setText(String.format("%.02f", accSDK[0])+", "+String.format("%.02f", accSDK[1])+", "+String.format("%.02f", accSDK[2]));
         accCor_tv.setText(String.format("%.02f", accCor[0])+", "+String.format("%.02f", accCor[1])+", "+String.format("%.02f", accCor[2]));
         without_tv.setText(String.format("%.02f", without[0])+", "+String.format("%.02f", without[1])+", "+String.format("%.02f", without[2]));
+        accNewton_tv.setText(String.format("%.02f", accNewton[0])+", "+String.format("%.02f", accNewton[1])+", "+String.format("%.02f", accNewton[2]));
 
         for (int i = 0; i < 3; i++) {
             velNDK[i]+=accNDK[i]*0.01;
             velSDK[i]+=accSDK[i]*0.01;
             velCor[i]+=accCor[i]*0.01;
             velWithout[i]+=without[i]*0.01;
+            velNewton[i]+=accNewton[i]*0.01;
         }
         for (int i = 0; i < 3; i++) {
             disNDK[i]+=velNDK[i]*0.01;
             disSDK[i]+=velSDK[i]*0.01;
             disCor[i]+=velCor[i]*0.01;
             disWithout[i]+=velWithout[i]*0.01;
+            disNewton[i]+=velNewton[i]*0.01;
         }
 
         velNDK_tv.setText(String.format("%.02f", velNDK[0])+", "+String.format("%.02f", velNDK[1])+", "+String.format("%.02f", velNDK[2]));
         velSDK_tv.setText(String.format("%.02f", velSDK[0])+", "+String.format("%.02f", velSDK[1])+", "+String.format("%.02f", velSDK[2]));
         velCor_tv.setText(String.format("%.02f", velCor[0])+", "+String.format("%.02f", velCor[1])+", "+String.format("%.02f", velCor[2]));
         velWithout_tv.setText(String.format("%.02f", velWithout[0])+", "+String.format("%.02f", velWithout[1])+", "+String.format("%.02f", velWithout[2]));
+        velNewton_tv.setText(String.format("%.02f", velNewton[0])+", "+String.format("%.02f", velNewton[1])+", "+String.format("%.02f", velNewton[2]));
 
         disNDK_tv.setText(String.format("%.02f", disNDK[0])+", "+String.format("%.02f", disNDK[1])+", "+String.format("%.02f", disNDK[2]));
         disSDK_tv.setText(String.format("%.02f", disSDK[0])+", "+String.format("%.02f", disSDK[1])+", "+String.format("%.02f", disSDK[2]));
         disCor_tv.setText(String.format("%.02f", disCor[0])+", "+String.format("%.02f", disCor[1])+", "+String.format("%.02f", disCor[2]));
         disWithout_tv.setText(String.format("%.02f", disWithout[0])+", "+String.format("%.02f", disWithout[1])+", "+String.format("%.02f", disWithout[2]));
+        disNewton_tv.setText(String.format("%.02f", disNewton[0])+", "+String.format("%.02f", disNewton[1])+", "+String.format("%.02f", disNewton[2]));
 
 
 
         String accStr =   x + " " + y + " " + z+ " " + accSDK[0] + " " + accSDK[1] + " " + accSDK[2]+"\n";
+        String accVelDis =  
+                x + " " + y + " " + z+ " "
+                + accSDK[0] + " " + accSDK[1] + " " + accSDK[2]+ " "
+                + accCor[0] + " " + accCor[1] + " " + accCor[2] + " "
+                + accNewton[0] + " " + accNewton[1] + " " + accNewton[2]+ " "
+                + without[0] + " " + without[1] + " " + without[2]+ " "
+                    + velNDK[0] + " " + velNDK[1] + " " + velNDK[2]+ " "
+                    + velSDK[0] + " " + velSDK[1] + " " + velSDK[2]+ " "
+                    + velCor[0] + " " + velCor[1] + " " + velCor[2]+ " "
+                    + velNewton[0] + " " + velNewton[1] + " " + velNewton[2]+ " "
+                    + velWithout[0] + " " + velWithout[1] + " " + velWithout[2]+ " "
+                        + disNDK[0] + " " + disNDK[1] + " " + disNDK[2]+ " "
+                        + disSDK[0] + " " + disSDK[1] + " " + disSDK[2]+ " "
+                        + disCor[0] + " " + disCor[1] + " " + disCor[2]+ " "
+                        + disNewton[0] + " " + disNewton[1] + " " + disNewton[2]+ " "
+                        + disWithout[0] + " " + disWithout[1] + " " + disWithout[2]
+                        +"\n";
 
-//        System.out.println(accStr);
+        System.out.println(accVelDis);
 
     }
     void calculateAngle(float[] acc)

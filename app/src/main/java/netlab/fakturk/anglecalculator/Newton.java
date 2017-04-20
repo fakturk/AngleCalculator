@@ -94,16 +94,16 @@ public class Newton
     }
     float iterate(float alphaZero,float[] acc)
     {
-        float alphaK=alphaZero, alphaKPlusOne=0;
+        float alphaK=0, alphaKPlusOne=0;
 
         for (int i = 0; i < 1000; i++)
         {
             float fd = firstDerivative(acc,alphaK);
             float sd = secondDerivative(acc,alphaK);
             sd = Math.abs(sd);
-            if (sd==0)
+            if (sd<=0.001f)
             {
-                sd = 1;
+                sd = 0.001f;
             }
             alphaKPlusOne = alphaK-(fd/sd);
             if (Math.abs(alphaKPlusOne-alphaK)<epsilon)
@@ -127,6 +127,6 @@ public class Newton
 
         }
 
-        return alphaKPlusOne;
+        return -alphaKPlusOne;
     }
 }
