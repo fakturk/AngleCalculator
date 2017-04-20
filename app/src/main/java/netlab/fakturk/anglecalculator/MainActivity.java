@@ -182,6 +182,7 @@ public class MainActivity extends AppCompatActivity
         disWithout_tv.setText(String.format("%.02f", disWithout[0])+", "+String.format("%.02f", disWithout[1])+", "+String.format("%.02f", disWithout[2]));
 
 
+
         String accStr =   x + " " + y + " " + z+ " " + accSDK[0] + " " + accSDK[1] + " " + accSDK[2]+"\n";
 
 //        System.out.println(accStr);
